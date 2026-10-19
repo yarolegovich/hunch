@@ -110,19 +110,20 @@ note() {
 trap 'rm -rf out' EXIT
 
 clear
-note "hunch: ask a typed question about every record in a pipe."
+note "hunch: ask a plain-English question about every line of input."
 run 'hunch "Is this an authentication failure?" app.log'
 
 note "Keep confident yeses and print just the original lines."
 run 'hunch "Is this an authentication failure?" --min 0.8 --raw app.log'
 
 note "Route JSON tickets into a file per team, judging only their .body."
-run "hunch pick \"Which team?\" -c billing,technical,sales --jsonpath '\$.body' \\
--o 'out/{choice}.jsonl' < tickets.jsonl"
+run "hunch pick \"Which team?\" -c billing,technical,sales \\
+--jsonpath '\$.body' -o 'out/{choice}.jsonl' < tickets.jsonl"
 run "wc -l out/*"
 
 note "Rank on a scale and keep the top 3."
-run 'hunch score "How frustrated is the customer?" -l calm,annoyed,furious --top 3 reviews.txt'
+run 'hunch score "How frustrated is the customer?" -l calm,annoyed,furious \
+--top 3 reviews.txt'
 
 note "Piped output is JSONL or TSV, ready for the next command."
 run 'hunch "Should on-call look at this?" --tsv app.log | sort -rn | head -3'

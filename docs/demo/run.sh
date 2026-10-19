@@ -15,8 +15,8 @@
 # Tunables (env vars, with defaults):
 #   THEME  github-dark               agg color theme (see `agg --help`)
 #   FONT   agg's default list        text font family, e.g. "JetBrains Mono"
-#   COLS   112                       terminal columns
-#   ROWS   28                        terminal rows
+#   COLS   92                        terminal columns
+#   ROWS   26                        terminal rows
 #   HUNCH_DEMO_CACHE   ~/.cache/hunch-demo   where agg is cached
 
 set -euo pipefail
@@ -26,8 +26,8 @@ DEMO_DIR="$ROOT/docs/demo"
 CACHE="${HUNCH_DEMO_CACHE:-$HOME/.cache/hunch-demo}"
 
 THEME="${THEME:-github-dark}"
-COLS="${COLS:-112}"
-ROWS="${ROWS:-28}"
+COLS="${COLS:-92}"
+ROWS="${ROWS:-26}"
 GIF="${GIF:-$DEMO_DIR/hunch-demo.gif}"
 
 mkdir -p "$CACHE/bin"
@@ -78,8 +78,8 @@ fi
 CAST="$BIN_DIR/hunch-demo.cast"
 
 echo "==> recording demo.sh (${COLS}x${ROWS})"
-asciinema rec --cols "$COLS" --rows "$ROWS" --overwrite \
-  --title "hunch — typed judgments for your pipelines" \
+asciinema rec --window-size "${COLS}x${ROWS}" --overwrite \
+  --title "hunch — sort, filter and route text by what it means" \
   --command "bash $DEMO_DIR/demo.sh" \
   "$CAST"
 

@@ -1,33 +1,53 @@
-# hunch
+<!-- markdownlint-disable no-inline-html first-line-heading -->
 
-**Sort, filter and route text by what it means.** Pipe in logs, tickets,
-reviews or diffs, ask a question in plain English, and `hunch` answers it for
-every line: yes or no, which category, or how much. Each answer comes with a
-confidence score your next command can act on.
+<div align="center">
+  <h1>🔮 hunch</h1>
+  <h3>Sort, filter and route text by what it means.</h3>
+</div>
+
+<p align="center">
+  <a href="https://github.com/yarolegovich/hunch/releases/latest"><img src="https://img.shields.io/github/v/release/yarolegovich/hunch?sort=semver" alt="Latest release"></a>
+  <a href="./LICENSE"><img src="https://img.shields.io/github/license/yarolegovich/hunch" alt="License: Apache-2.0"></a>
+  <a href="./go.mod"><img src="https://img.shields.io/github/go-mod/go-version/yarolegovich/hunch" alt="Go version"></a>
+</p>
+
+<!-- markdownlint-enable no-inline-html first-line-heading -->
+
+Pipe in logs, tickets, reviews or diffs, ask a question in plain English, and
+`hunch` answers it for every line: yes or no, which category, or how much.
+Each answer comes with a confidence score your next command can act on.
 
 ```sh
 kubectl logs api | hunch "Is this an authentication failure?" --min 0.8 --raw
 ```
 
-![hunch demo](docs/demo/hunch-demo.gif)
+<div align="center">
+  <img src="./docs/demo/hunch-demo.gif" alt="hunch demo: filter a log, route tickets into a file per team, rank reviews" width="720">
+</div>
 
-Each record is judged by Jev, TypeSafe's
-[System One](https://docs.typesafe.ai/introduction) model, through TypeSafe,
-OpenRouter or OpenCode Zen. Answers are calibrated probabilities, so
-thresholds and routing are built in.
+## ✨ Why hunch
 
-Jev is fast and cheap enough to run on everything. Say hunch labels every pull
-request in CI. A typical PR (title, description and a few hundred lines of
-diff) is about 2,000 tokens. At $0.042 per million input tokens, with output
-free, that's less than a hundredth of a cent per PR: **one dollar labels about
-12,000 PRs**, each in roughly 100 ms. Further questions about the same PR,
-such as how risky it is or whether it adds secrets, go into that same call and
-add little latency.
+- **🧠 Powered by Jev.** Each record is judged by Jev, TypeSafe's
+  [System One](https://docs.typesafe.ai/introduction) model, through
+  TypeSafe, OpenRouter or OpenCode Zen.
+- **🎯 Calibrated answers.** Every answer is a probability you can trust, so
+  thresholds, sorting and routing are built in.
+- **⚡ Fast and cheap enough to run on everything.** About 100 ms a record,
+  and output tokens are free.
+- **🐧 A good Unix citizen.** Lines, JSONL or whole files in; JSONL, TSV or
+  the original lines out; exit codes that work in `if` and git hooks.
+
+Say hunch labels every pull request in CI. A typical PR (title, description
+and a few hundred lines of diff) is about 2,000 tokens. At $0.042 per million
+input tokens, that's less than a hundredth of a cent per PR: **one dollar
+labels about 12,000 PRs**. Further questions about the same PR, such as how
+risky it is or whether it adds secrets, go into that same call and add little
+latency.
 
 <sub>TypeSafe [pricing](https://docs.typesafe.ai/models) as of October 19,
 2026; OpenRouter and OpenCode Zen may differ.</sub>
 
-## Install
+## 🚀 Install
 
 ```sh
 brew install yarolegovich/tap/hunch
@@ -42,7 +62,7 @@ Then pick a provider and store its key:
 hunch auth login
 ```
 
-## Commands
+## 🧰 Commands
 
 | Command | What it asks |
 | - | - |
@@ -56,12 +76,24 @@ hunch auth login
 Input modes, output formats, filtering, exit codes and configuration are in
 [docs/usage.md](docs/usage.md).
 
-## Examples
+## 🍳 Cookbook
+
+Real workflows, start to finish. Each one is a single page you can copy from:
+
+1. **[CI auto-labeler](examples/01-ci-auto-labeler.md)**: label every pull
+   request by kind and risk in a GitHub Actions workflow.
+2. **[Log explorer](examples/02-log-explorer.md)**: get the shape of a huge
+   log, zoom in on what matters and watch a live tail.
+3. **[Issue triage bot](examples/03-issue-triage.md)**: label new GitHub
+   issues, ask for missing repro steps and close spam.
+4. **[Pre-commit guard](examples/04-pre-commit-guard.md)**: stop secrets and
+   leftover debug code before they're committed.
+5. **[Flaky CI retry](examples/05-flaky-ci-retry.md)**: when CI fails,
+   re-run it only if the environment broke, not the code.
+
+## 💡 One-liners
 
 ```sh
-# keep only auth failures
-kubectl logs api-7f | hunch "Is this an authentication failure?" --min 0.8 --raw
-
 # judge one field of each JSON record, keep the rest for later steps
 hunch "Is the customer asking for a refund?" --jsonpath '$.body' --min 0.8 < tickets.jsonl | jq -r .id
 
@@ -80,6 +112,6 @@ gh pr diff "$PR" | hunch pick --in whole "What kind of change is this?" -c featu
 git diff --cached | hunch --in whole "Does this diff add debug code or secrets?" --max 0.3 >/dev/null
 ```
 
-## License
+## 📄 License
 
 [Apache-2.0](LICENSE)
