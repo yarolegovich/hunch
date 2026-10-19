@@ -2,8 +2,8 @@
 # Docs: https://goreleaser.com
 #
 # Pushing a v* tag runs .github/workflows/release.yml, which builds static
-# binaries, creates the GitHub Release and updates the Homebrew cask in
-# yarolegovich/homebrew-tap.
+# binaries, creates the GitHub Release and commits the Homebrew cask to
+# Casks/ in this repo, which doubles as its own tap.
 version: 2
 
 project_name: hunch
@@ -77,7 +77,7 @@ homebrew_casks:
       zsh: completions/_hunch
       fish: completions/hunch.fish
     homepage: "https://github.com/yarolegovich/hunch"
-    description: "Unix filter that asks fast, typed judgments about each input record"
+    description: "AI-powered Unix filter that judges each record by meaning"
     directory: Casks
     commit_author:
       name: hunch-release-bot
@@ -93,9 +93,9 @@ homebrew_casks:
           end
     repository:
       owner: yarolegovich
-      name: homebrew-tap
+      name: hunch
       branch: main
-      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+      token: "{{ .Env.GITHUB_TOKEN }}"
 
 release:
   github:

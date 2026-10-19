@@ -22,5 +22,5 @@ commands are in `docs/demo/demo.sh`; colors are set at its top.
 ## Releases
 
 Pushing a `v*` tag runs GoReleaser, which builds the binaries, creates the
-GitHub Release and updates the Homebrew cask in
-[yarolegovich/homebrew-tap](https://github.com/yarolegovich/homebrew-tap).
+GitHub Release and commits the Homebrew cask to `Casks/` on `main`. The
+repo is its own tap, so no separate tap repo or token is needed.

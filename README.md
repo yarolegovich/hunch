@@ -50,7 +50,8 @@ latency.
 ## 🚀 Install
 
 ```sh
-brew install yarolegovich/tap/hunch
+brew tap yarolegovich/hunch https://github.com/yarolegovich/hunch
+brew install hunch
 # or
 go install github.com/yarolegovich/hunch@latest
 ```

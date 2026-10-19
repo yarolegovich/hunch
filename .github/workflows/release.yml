@@ -24,6 +24,5 @@ jobs:
           version: "~> v2"
           args: release --clean
         env:
+          # Also commits the cask to Casks/ on main (contents: write above).
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # A fine-grained PAT with contents: write on yarolegovich/homebrew-tap.
-          HOMEBREW_TAP_GITHUB_TOKEN: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
