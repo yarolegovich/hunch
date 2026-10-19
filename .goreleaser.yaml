@@ -1,0 +1,103 @@
+# GoReleaser configuration for hunch.
+# Docs: https://goreleaser.com
+#
+# Pushing a v* tag runs .github/workflows/release.yml, which builds static
+# binaries, creates the GitHub Release and updates the Homebrew cask in
+# yarolegovich/homebrew-tap.
+version: 2
+
+project_name: hunch
+
+before:
+  hooks:
+    - go mod tidy
+    - ./scripts/completions.sh
+
+builds:
+  - id: hunch
+    main: .
+    binary: hunch
+    env:
+      - CGO_ENABLED=0
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w
+      - -X github.com/yarolegovich/hunch/internal/cli.ver={{ .Version }}
+      - -X github.com/yarolegovich/hunch/internal/cli.commit={{ .ShortCommit }}
+      - -X github.com/yarolegovich/hunch/internal/cli.date={{ .CommitDate }}
+    mod_timestamp: "{{ .CommitTimestamp }}"
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+
+archives:
+  - id: hunch
+    ids:
+      - hunch
+    name_template: >-
+      {{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}
+    formats:
+      - tar.gz
+    format_overrides:
+      - goos: windows
+        formats:
+          - zip
+    files:
+      - LICENSE
+      - README.md
+      - completions/*
+
+checksum:
+  name_template: checksums.txt
+
+snapshot:
+  version_template: "{{ incpatch .Version }}-next"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^chore:"
+
+homebrew_casks:
+  - name: hunch
+    ids:
+      - hunch
+    binaries:
+      - hunch
+    completions:
+      bash: completions/hunch
+      zsh: completions/_hunch
+      fish: completions/hunch.fish
+    homepage: "https://github.com/yarolegovich/hunch"
+    description: "Unix filter that asks fast, typed judgments about each input record"
+    directory: Casks
+    commit_author:
+      name: hunch-release-bot
+      email: yarolegovich@gmail.com
+    commit_msg_template: "hunch {{ .Tag }}"
+    skip_upload: auto
+    hooks:
+      post:
+        # The binaries are not notarized; without this macOS refuses to run them.
+        install: |
+          if OS.mac?
+            system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/hunch"]
+          end
+    repository:
+      owner: yarolegovich
+      name: homebrew-tap
+      branch: main
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+
+release:
+  github:
+    owner: yarolegovich
+    name: hunch
