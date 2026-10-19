@@ -51,6 +51,7 @@ latency.
 
 ```sh
 brew tap yarolegovich/hunch https://github.com/yarolegovich/hunch
+brew trust yarolegovich/hunch   # Homebrew asks you to trust third-party taps
 brew install hunch
 # or
 go install github.com/yarolegovich/hunch@latest
