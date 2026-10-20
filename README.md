@@ -27,14 +27,14 @@ kubectl logs api | hunch "Is this an authentication failure?" --min 0.8 --raw
 
 ## ✨ Why hunch
 
-- **🧠 Powered by Jev.** Each record is judged by Jev, TypeSafe's
+- **Powered by Jev.** Each record is judged by Jev, TypeSafe's
   [System One](https://docs.typesafe.ai/introduction) model, through
   TypeSafe, OpenRouter or OpenCode Zen.
-- **🎯 Calibrated answers.** Every answer is a probability you can trust, so
+- **Calibrated answers.** Every answer is a probability you can trust, so
   thresholds, sorting and routing are built in.
-- **⚡ Fast and cheap enough to run on everything.** About 100 ms a record,
+- **Fast and cheap enough to run on everything.** About 100 ms a record,
   and output tokens are free.
-- **🐧 A good Unix citizen.** Lines, JSONL or whole files in; JSONL, TSV or
+- **A good Unix citizen.** Lines, JSONL or whole files in; JSONL, TSV or
   the original lines out; exit codes that work in `if` and git hooks.
 
 Say hunch labels every pull request in CI. A typical PR (title, description
